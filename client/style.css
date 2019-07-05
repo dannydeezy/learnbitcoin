@@ -1,0 +1,46 @@
+html {
+
+}
+body {
+    background-color:lightyellow;
+    text-align:center;
+    font-family:Menlo;
+    font-size:14pt;
+}
+h1 {
+
+}
+.instruction {
+
+}
+h4, .center {
+    text-align:center;
+}
+.code {
+    text-align:left;
+    background-color: lightgray;
+    font-family:Courier;
+    border-radius:10px;
+    width:80%;
+    padding:30px;
+    margin:auto;
+    overflow:scroll;
+    white-space: nowrap;
+    font-size:12pt;
+}
+#my_address {
+}
+.note {
+    font-size:10pt;
+    font-style:italic;
+}
+#finishedtx {
+    width:80%;
+    word-wrap:break-word;
+    text-align:center;
+    color:green;
+    margin:auto;
+    background-color:lightgray;
+    padding:30px;
+    border-radius:10px;
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Bitcoin</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!--
+    <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+    <script type="text/javascript" src="/bolt11.min.js"></script>
+    <script src="https://unpkg.com/webln@0.1.0/dist/webln.min.js" integrity="sha384-KbiwDLn7g4wD+1fs5EA/1c6p4Zzy0u8RwWObPvI+ty1WpALihdyvjF7/yKJzJk/I" crossorigin="anonymous"></script>
+-->
+</head>
+<body>
+<h1>Learning Bitcoin</h1>
+<div id="content">
+    <div class="instruction" id="step0" style="display:none">
+        <h4>Step 0: Set Up</h4>
+        Open the developer console with Option-Command-J<br><br>
+        Drag the window to a comfortable size<br><br>
+        Increase the text size with Command-Plus, or decrease with Command-Minus<br><br>
+        When you're ready, try typing the command <br><br>
+        <div class="code">next()</div> <br><br>and press enter.
+    </div>
+    <div class="instruction" id="step1" style="display:none">
+        <h4>Step 1: Generate Key Pair</h4>
+        Nice!<br><br>
+        Now we're going to generate a private/public key pair<br><br>
+        Try the command: <br><br>
+        <div class="code">keyPair = bitcoin.ECPair.makeRandom()</div><br><br>
+        Now let's save your key to localStorage in WIF format:<br><br>
+        <div class="code">
+            keyPair.network = bitcoin.networks.testnet<br><br>
+            wif = keyPair.toWIF()<br><br>
+            localStorage.setItem('wif', wif)<br><br>
+        </div><br><br>
+        When you've done that, move on with the command: <br><br>
+        <div class="code">next()</div>
+    </div>
+    <div class="instruction" id="step2" style="display:none">
+        <h4>Step 2: Generate Address</h4>
+        Awesome!<br><br><br><br>
+        Now lets create a testnet address from your keypair.<br><br>
+        Do the following commands in order:<br><br>
+        <div class="code">
+            network = bitcoin.networks.testnet<br><br>
+            pubkey = keyPair.publicKey<br><br>
+            address = bitcoin.payments.p2pkh({pubkey, network}).address
+        </div><br><br>
+        <span class="note">(hint: you can clear your console with: Command-K)</span><br><br>
+        When ready, do next()
+    </div>
+    <div class="instruction" id="step3" style="display:none">
+        <h4>Step 3: Get Some Testnet Bitcoin!</h4>
+        <br><br>Nice Job! You now have an address:<br><br>
+        <a target="_blank" id="my_address"></a><br><br><br><br>
+        You can click on the address to see its info on a public block explorer<br><br><br><br>
+        Now I'm going to send you some testnet bitcoin.<br><br>
+        Try the command:<br><br>
+        <div class="code">sendMeSomeTestnetBtc()</div><br><br>
+        <span class="note">Note: This is not real bitcoin.<br>It is a separate public network designed for testing purposes</span><br><br>
+        <div id="received_tx" style="display:none">
+            Success! <br><br>
+            Do next() and we'll learn about your transaction.
+        </div>
+
+    </div>
+    <div class="instruction" id="step4" style="display:none">
+        <h4>Step 4: Inspect Your Transaction</h4>
+        You received: <span id="received_amt"></span> TBTC<br><br>
+        As output #<span id="received_vout"></span><br><br><br><br>
+        The link below is a public block explorer<br><br>
+        that shows all the details of this transaction.<br><br>
+        See if you can find your address, the amount, and the output #<br><br><br><br>
+        <a id="received_tx_link" target="_blank"></a><br><br>
+        <span class="note">(hint: scroll down and look towards the bottom right of the page)</span><br><br><br><br>
+        <span id="tx_inspect_next">
+            I've also set the variable "txid" for you.<br><br>
+            In the console type:<br><br>
+            <div class="code">txid</div><br><br>
+            To see what it is. Then, do next()
+        </span>
+    </div>
+    <div class="instruction" id="step5" style="display:none">
+    <h4>Step 5: Construct Transaction</h4><br><br>
+        First you need to load the input transaction:<br><br>
+        <div class="code">
+            txb = new bitcoin.TransactionBuilder(bitcoin.networks.testnet)<br><br>
+            txb.addInput(txid, receivedvout)
+        </div><br><br>
+        Then load up the amounts and destination address<br><br>
+        <span class="note">Note, you are sending the tbtc back to my address <br>(2Mz4V6PBVBVxXJgJpCWkQZtPU67NbEyu8k3)<br>
+        and we are leaving a fee of 200 satoshis for the miners</span><br><br>
+        <div class="code">
+            destination = '2Mz4V6PBVBVxXJgJpCWkQZtPU67NbEyu8k3'<br><br>
+            miner_fee = 200<br><br>
+            out_amount = received*100000000 - miner_fee<br><br>
+            txb.addOutput(destination, out_amount)
+        </div><br><br>
+        Do next() when ready.
+    </div>
+    <div class="instruction" id="step6" style="display:none">
+        <h4>Step 6: Sign Transaction</h4>
+        Let's load your private key up from localStorage<br><br>
+        <div class="code">
+            wif = localStorage.getItem('wif')<br><br>
+            keyPair = bitcoin.ECPair.fromWIF(wif, bitcoin.networks.testnet)
+        </div><br><br>
+        Once you have the keyPair, lets sign the transaction's input:<br><br>
+        <div class="code">
+            vin = 0<br><br>
+            txb.sign(vin, keyPair)
+        </div><br><br>
+        And finally build the transaction and serialize it into Hex format<br><br>
+        <div class="code">
+            final_tx = txb.build().toHex()
+        </div><br><br>
+        Type next() when you've completed these steps
+    </div>
+    <div class="instruction" id="step7" style="display:none">
+        <h4>Step 7: Broadcast Transaction</h4><br><br>
+        Nice! You've successfully signed a transaction!<br><br>
+        The transaction you generated is below. <br><br>
+        <div id="finishedtx"></div><br><br>
+        Now we're going to broadcast it to a public block explorer.<br><br>
+        First, copy the value in the box above.<br><br>
+        Then, <a target="_blank" href="https://blockstream.info/testnet/tx/push">click here to open the block explorer</a><br><br><br><br>
+        Paste the value you copied into the white box on that page,<br><br>
+        Then click the button "Broadcast transaction"<br><br>
+
+    </div>
+</div>
+<!--
+<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript" src="/client.js"></script>
+-->
+<script type="text/javascript" src="/lesson1/bundle.js"></script>
+
+</body>
+</html>
