@@ -3,14 +3,13 @@ const bodyparser = require('body-parser');
 const favicon = require('express-favicon');
 const BitGoJS = require('bitgo')
 const app = express();
-const port = 80;
+const port = 3333;
 //process.config = require('./config');
 //const server = require('./server');
-const accessToken = 'v2x6d824cff6a8783e509fbf8bf691eac59cc077d07d4abfcca743a700e82ce8ac0';
 const walletId = '5d1f913ea8f49d7803b9d5e91c1d8ca7';
 const walletPassphrase = ''
 
-const bitgo = new BitGoJS.BitGo({env: 'test', accessToken});
+const bitgo = new BitGoJS.BitGo({env: 'test', accessToken: process.env.ACCESS_TOKEN});
 let wallet;
 
 
@@ -28,7 +27,7 @@ const handleSendMoney = async function(req, res) {
   let params = {
     address: req.body.address,
     amount: '100000',
-    walletPassphrase
+    walletPassphrase: process.env.PASSPHRASE
   };
   wallet.send(params).then((response) => {
     console.dir(response);
